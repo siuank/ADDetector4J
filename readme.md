@@ -16,17 +16,19 @@
 - 修改TextFilter中的模型文件`judge.model`为`ad-detector.model`，将词库文件`tokenize.model`改为`t1.tokenized.txt`
 - 使用TextFilter#isIllegal(String)即可调用模型
 
-# 训练
-## 如果是自己训练，按顺序运行（均为main函数)
-- BuildTokenizer.java
+## 训练
+### 如果是自己训练，按顺序运行（均为main函数)
 - Wash.java
+- BuildTokenizer.java
 - BuildModel.java
 - Train.java (请注意将Model载入更改为构建)
-## 如果是使用预训练模型，但是自行微调，请使用 Tune.java
-## 使用模型预测或者审阅训练结果请移步 TestResult.java
+### 如果是使用预训练模型，但是自行微调
+- 请使用 Tune.java
+### 使用模型预测或者审阅训练结果
+- 请移步 TestResult.java
 
-# 文件
-## 预测用：
+## 文件
+### 预测用：
 | 文件名               | 用途                                                          |
 |-------------------|-------------------------------------------------------------|
 | ad-detector.model | 移除Dropout层后的模型文件<br/>可直接在LL4J中使用                            |
@@ -34,7 +36,7 @@
 | t1.tokenized.txt  | 词库文件                                                        |
 正常来说，预测只需要这两个资源文件即可
 
-## 训练用：
+### 训练用：
 | 文件名             | 用途                                                                      |
 |-----------------|-------------------------------------------------------------------------|
 | mc_qq_group.txt | 数据集 (由[hsn8086](https://www.github.com/hsn8086/)整理，我们进行了些增删操作以保证一定的时效性) |
@@ -47,7 +49,7 @@
 | ads.txt               | 对数据集进行一些额外的补充，供微调数据集用                           |
 | ads-special-regex.txt | 一些特殊规则，用于直接过滤一些不适合进入数据集的广告（如同音字替换等）<br/>相当于特征库？ |
 
-## 效果展示：
+### 效果展示：
 `Matcher`为项目[LingBot](https://github.com/LingBot-Project/LingBot)提供的正则表达式的匹配结果，`ML`为模型预测结果 
 
 在测试前，这些数据均未被加入到训练集中训练

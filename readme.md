@@ -1,5 +1,5 @@
 # ADDetector4J
-## 本项目使用[LL4J](https://www.github.com/LL4J/LL4J)作训练与预测框架
+### 本项目使用[LL4J](https://www.github.com/LL4J/LL4J)作训练与预测框架
 
 # 关于模型
 ### 本地测试准确度达99.4%，训练集准确度达到99.57%，实际效果可能根据情况有所波动
@@ -33,7 +33,8 @@
 | ad-detector.model | 移除Dropout层后的模型文件<br/>可直接在LL4J中使用                            |
 | anti-ad.model     | 训练/测试用模型文件<br/>除非你自己加Dropout层，否则请使用ad-detector.model进行训练等操作 |
 | t1.tokenized.txt  | 词库文件                                                        |
-正常来说，预测只需要这两个资源文件即可
+
+正常来说，预测只需要`ad-detector.model`, `t1.tokenized.txt`这两个资源文件即可
 
 ### 训练用：
 | 文件名             | 用途                                                                      |

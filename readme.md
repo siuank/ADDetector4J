@@ -115,6 +115,15 @@ Matcher: -, ML: -
 * 读取规则集`ads-special-regex.txt`后分行，再使用`Pattern.compile`编译成正则表达式，再使用`Matcher#find`匹配
 * 如果匹配到，直接返回`true`，不再进行模型预测
 
+# 鸣谢
+* huzpsb
+  * 机器学习指导
+  * LL4J制作
+* hsn8086
+  * 制作数据集
+* loyisa
+  * 部分样本提供 
+
 ### 模型和数据集会不定期更新
 
 gradle？maven package？拉倒吧

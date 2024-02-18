@@ -64,12 +64,12 @@ public class Train {
             Pair<Integer, Integer> pair = model.trainOn(trainSplit, 9e-6);
             System.out.printf("%s > %s (acc:%.2f%%) %n", i + 1, pair, pair.first() * 100.0 / trainSize);
 
-            DataSet set = new DataSet();
-            set.split.addAll(model.testAndGetWA(trainSplit).stream().filter(ignored -> ThreadLocalRandom.current().nextBoolean()).toList());
-            if (!set.split.isEmpty()) {
-                Collections.shuffle(set.split);
-                model.trainOn(set, 5e-9);
-            }
+//            DataSet set = new DataSet();
+//            set.split.addAll(model.testAndGetWA(trainSplit).stream().filter(ignored -> ThreadLocalRandom.current().nextBoolean()).toList());
+//            if (!set.split.isEmpty()) {
+//                Collections.shuffle(set.split);
+//                model.trainOn(set, 5e-9);
+//            }
             model.save("anti-ad.model");
         }
 
@@ -78,6 +78,6 @@ public class Train {
 
         model.save("anti-ad.model");
 
-        System.out.println("Using console!");
+        System.out.println("-exit-");
     }
 }

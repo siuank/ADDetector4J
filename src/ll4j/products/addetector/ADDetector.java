@@ -3,7 +3,6 @@ package ll4j.products.addetector;
 import java.io.*;
 import java.util.Scanner;
 import java.util.regex.Pattern;
-import java.util.stream.Collectors;
 
 @SuppressWarnings("unused")
 public class ADDetector {
@@ -150,9 +149,9 @@ public class ADDetector {
         public double[] tokenize(String text) {
             String regularized = regularize(text);
             double[] values = new double[vocab.length + 1];
-            values[vocab.length] = text.length();
+            values[0] = text.length();
             for (int i = 0; i < vocab.length; i++) {
-                values[i] = regularized.contains(vocab[i]) ? 1 : 0;
+                values[i + 1] = regularized.contains(vocab[i]) ? 1 : 0;
             }
             return values;
         }

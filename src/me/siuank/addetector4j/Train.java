@@ -1,4 +1,4 @@
-package samples.addetector4j;
+package me.siuank.addetector4j;
 
 import huzpsb.ll4j.utils.data.*;
 import huzpsb.ll4j.model.Model;
@@ -8,9 +8,12 @@ import huzpsb.ll4j.utils.pair.Pair;
 import java.io.File;
 import java.util.Collections;
 import java.util.Scanner;
+import java.util.concurrent.ExecutorService;
+import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
 
 public class Train {
+    static final ExecutorService executor = Executors.newSingleThreadExecutor();
     public static void main(String[] args) throws Exception {
         Scanner scanner;
         Tokenizer tokenizer = Tokenizer.loadFromFile("t1.tokenized.txt");
@@ -40,42 +43,32 @@ public class Train {
         }
         scanner.close();
 
-//        Model model = new Model(
-//                new DenseLayer(1024, 20)
-//                , new LeakyRelu(20)
-//                , new DenseLayer(20, 100)
-//                , new LeakyRelu(100)
-//                , new DenseLayer(100, 2)
-//                , new JudgeLayer(2) // MSELoss
-//        );
-
-        int size = tokenizer.size();
-//        Model model = new Model.ContextBuilder(size)
-//                .DenseLayer(20).LeakyReluLayer()
-//                .DenseLayer(50).LeakyReluLayer()
-//                .DropoutLayer(0.6)
-//                .DenseLayer(100).LeakyReluLayer()
-//                .DenseLayer(2)
-//                .build();
         Model model = Model.readFrom("anti-ad.model");
-        System.out.println(size);
         int trainSize = trainSplit.split.size();
-        for (int i = 0; i < 128; i++) {
-            Pair<Integer, Integer> pair = model.trainOn(trainSplit, 9e-6);
-            System.out.printf("%s > %s (acc:%.2f%%) %n", i + 1, pair, pair.first() * 100.0 / trainSize);
-
-//            DataSet set = new DataSet();
-//            set.split.addAll(model.testAndGetWA(trainSplit).stream().filter(ignored -> ThreadLocalRandom.current().nextBoolean()).toList());
-//            if (!set.split.isEmpty()) {
-//                Collections.shuffle(set.split);
-//                model.trainOn(set, 5e-9);
-//            }
-            model.save("anti-ad.model");
+        double lr = 5e-6;
+        for (int i = 0; i < 4096; i++) {
+            Pair<Integer, Integer> pair = model.trainOn(trainSplit, lr);
+            double acc = pair.first() * 100.0 / trainSize;
+            final int I = i;
+            executor.submit(() -> System.out.printf("%s > %s (acc:%.2f%%) %n", I + 1, pair, acc));
+            if (acc > 99.3 && lr == 5e-6) {
+                executor.submit(() -> System.out.println("update learning rate"));
+                lr = 9e-7;
+            }
+            DataSet set = new DataSet();
+            set.split.addAll(model.testAndGetWA(trainSplit).stream().filter(ignored -> ThreadLocalRandom.current().nextBoolean()).toList());
+            if (!set.split.isEmpty()) {
+                Collections.shuffle(set.split);
+                model.trainOn(set, 5e-8);
+            }
+            // 事实上...我想说什么呢
+            executor.submit(() -> model.save("anti-ad.model"));
         }
 
         System.out.println("Using test data!");
         System.out.println(model.testOn(testSplit));
 
+        executor.shutdown();
         model.save("anti-ad.model");
 
         System.out.println("-exit-");

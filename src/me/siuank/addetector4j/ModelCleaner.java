@@ -1,4 +1,4 @@
-package samples.addetector4j;
+package me.siuank.addetector4j;
 
 import huzpsb.ll4j.model.Model;
 

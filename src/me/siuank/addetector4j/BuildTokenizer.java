@@ -1,4 +1,4 @@
-package samples.addetector4j;
+package me.siuank.addetector4j;
 
 import huzpsb.ll4j.nlp.token.Tokenizer;
 import huzpsb.ll4j.nlp.token.TokenizerBuilder;
@@ -19,10 +19,11 @@ public class BuildTokenizer {
                 }
             }
         }
+        // from jie-ba
         try (Scanner scanner = new Scanner("words.txt")) {
             while (scanner.hasNextLine()) {
                 String text = scanner.nextLine().split("\t")[0];
-                for (int i = 0; i < 10; i++) {
+                for (int i = 0; i < 15; i++) {
                     tb.update(text);
                 }
             }

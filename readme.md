@@ -1,30 +1,38 @@
 # ADDetector4J
+
+(因为有人想用所以把整个项目分离了出来.png)
+
 ### 本项目使用[LL4J](https://www.github.com/LL4J/LL4J)作训练与预测框架
+部分内容有所改动，因此开源完整修改版。如果改动部分出现异常表现，请在此处提交issue
 
 # 关于模型
-### 本地测试准确度达99.4%，训练集准确度达到99.57%，实际效果可能根据情况有所波动
+### 最新更新：2/23/2024
+accuracy: 95.17% (test) 95.32% (train)
+- 尝试修复部分误判(但结果可能并不是特别好？)
+- 懒得卷到99%了，95%凑合着倒也能用不是
 
 训练数据集中的广告主要来自MC作弊圈，部分来自于其他地方收集
 
 ## 缺陷
-- 该模型无法查出诸如同音字替换等混淆过的广告
-- 缺乏上下文使用的单字可能会被误判为广告
+- 未知
 
-## 解决方案
-- 自行匹配关键词库（使用Tokenizer#tokenize(int, String)），如果该串文字在词库中匹配度极低，但是长度很离谱，基本可以认定为混淆过的广告
-- 自行过滤单字
 
 ## 如果我需要在其他地方使用该模型
-- 保留关键词库与模型文件，从[Filter4J](https://github.com/LL4J/Filter4J/tree/main/src/filter)提取MinRt,TextFilter,Tokenizer类
-- 修改TextFilter中的模型文件`judge.model`为`ad-detector.model`，将词库文件`tokenize.model`改为`t1.tokenized.txt`
-- 使用TextFilter#isIllegal(String)即可调用模型
+- 保留关键词库与模型文件，将源代码文件中的`ll4j.products.addetector.ADDetector.java`提取并加入到您的项目中
+- 使用`ADDetector`类即可（详见`test.example.Example.java`）
+
+### 特殊的建议
+- QQ群聊
+  - 建议仅撤回被标记的信息，当且仅当连续被标记时才执行进一步的操作
 
 ## 训练
 ### 如果是自己训练，按顺序运行（均为main函数)
 - Wash.java
 - BuildTokenizer.java
 - BuildModel.java
-- Train.java (请注意将Model载入更改为构建)
+- Train.java
+- Tune.java (如果需要)
+- ModelCleaner.java (清除Dropout层)
 
 ### 如果是使用预训练模型，但是自行微调
 - 请使用 Tune.java
@@ -56,7 +64,7 @@
 | ads-special-regex.txt | 一些特殊规则，用于直接过滤一些不适合进入数据集的广告（如同音字替换等）<br/>相当于特征库？ |
 
 ### 效果展示：
-`Matcher`为项目[LingBot](https://github.com/LingBot-Project/LingBot)提供的正则表达式的匹配结果，`ML`为模型预测结果 
+`Matcher`为项目[LingBot](https://github.com/LingBot-Project/LingBot)提供的正则表达式的匹配结果，`ML`为模型预测结果
 
 在测试前，这些数据均未被加入到训练集中训练
 
@@ -124,14 +132,14 @@ Matcher: -, ML: -
 
 # 鸣谢
 * huzpsb
-  * 机器学习指导
-  * LL4J制作
+    * 机器学习指导
+    * LL4J制作
 * hsn8086
-  * 制作数据集
+    * 制作数据集
 * loyisa
-  * 部分样本提供
+    * 部分样本提供
 * guimc@ltd
-  * 提供测试集中的正则表达式
+    * 提供测试集中的正则表达式
 
 ### 模型和数据集会不定期更新
 

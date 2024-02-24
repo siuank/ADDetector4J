@@ -6,10 +6,10 @@
 部分内容有所改动，因此开源完整修改版。如果改动部分出现异常表现，请在此处提交issue
 
 # 关于模型
-### 最新更新：2/23/2024
-accuracy: 95.17% (test) 95.32% (train)
-- 尝试修复部分误判(但结果可能并不是特别好？)
-- 懒得卷到99%了，95%凑合着倒也能用不是
+### 最新更新：2/24/2024
+accuracy: 98.40% (test) 98.74% (train)
+- 更新数据集
+- 更新模型
 
 训练数据集中的广告主要来自MC作弊圈，部分来自于其他地方收集
 
@@ -126,9 +126,8 @@ Matcher: -, ML: -
 Matcher: -, ML: -
 ```
 
-## 规则集使用
-* 读取规则集`ads-special-regex.txt`后分行，再使用`Pattern.compile`编译成正则表达式，再使用`Matcher#find`匹配
-* 如果匹配到，直接返回`true`，不再进行模型预测
+## 其他
+`me.siuank.addetector.AdvetisementDetector`: 写着玩的东西
 
 # 鸣谢
 * huzpsb

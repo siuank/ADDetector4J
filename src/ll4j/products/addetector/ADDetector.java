@@ -1,18 +1,15 @@
 package ll4j.products.addetector;
 
 import java.io.*;
-import java.util.Scanner;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
 public class ADDetector {
     private final Tokenizer tokenizer;
     private final String[] script;
-    private Pattern pattern = null;
 
     public ADDetector(Tokenizer tokenizer, String script) {
-        this.tokenizer = tokenizer;
-        this.script = script.split("\n");
+        this(tokenizer, script.split("\n"));
     }
 
     public ADDetector(Tokenizer tokenizer, String[] script) {
@@ -21,15 +18,7 @@ public class ADDetector {
     }
 
     public boolean predict(String str) {
-        return patternPredict(str) || predict(tokenizer.tokenize(str), script) == 1;
-    }
-
-    public void setPattern(Pattern pattern) {
-        this.pattern = pattern;
-    }
-
-    public boolean patternPredict(String str) {
-        return pattern != null && pattern.matcher(str).find();
+        return predict(tokenizer.tokenize(str.replaceAll("\n", "").replaceAll("=", "-")), script) == 1;
     }
 
     static int predict(double[] input, String[] script) {
@@ -77,30 +66,6 @@ public class ADDetector {
                     }
                     break;
                 }
-                case "Th": {
-                    int n = Integer.parseInt(tokens[1]);
-                    if (current.length != n) {
-                        throw new RuntimeException("Wrong input size for Tanh layer (expected " + n + ", got " + current.length + ")");
-                    }
-                    for (int i = 0; i < n; i++) {
-                        current[i] = Math.tanh(current[i]);
-                    }
-                    break;
-                }
-                case "Softmax": {
-                    int n = Integer.parseInt(tokens[1]);
-                    if (current.length != n) {
-                        throw new RuntimeException("Wrong input size for Softmax layer (expected " + n + ", got " + current.length + ")");
-                    }
-                    double sum = 0;
-                    for (int i = 0; i < n; i++) {
-                        sum += Math.exp(current[i]);
-                    }
-                    for (int i = 0; i < n; i++) {
-                        current[i] = Math.exp(current[i]) / sum;
-                    }
-                    break;
-                }
                 case "J":
                     int m = Integer.parseInt(tokens[1]);
                     if (current.length != m) {
@@ -133,17 +98,36 @@ public class ADDetector {
             System.arraycopy(vocab, start, this.vocab, 0, length);
         }
 
-        public static Tokenizer loadFromFile(String filename) {
-            try (Scanner scanner = new Scanner(new File(filename))) {
-                String[] vocab;
-                int size = Integer.parseInt(scanner.nextLine());
-                vocab = new String[size];
-                for (int i = 0; i < size; i++) {
-                    vocab[i] = regularize(scanner.nextLine());
+        public static Tokenizer loadFromFile(File file) throws FileNotFoundException {
+            return loadFromStream(new FileInputStream(file));
+        }
+
+        public static Tokenizer loadFromStream(InputStream stream) {
+            return load(new InputStreamReader(stream));
+        }
+
+        public static Tokenizer load(Reader reader) {
+            return load(new BufferedReader(reader));
+        }
+
+        public static Tokenizer load(BufferedReader reader) {
+            String[] vocab = null;
+            try (reader) {
+                String str;
+                int index = 0;
+                while ((str = reader.readLine()) != null) {
+                    if (vocab == null) {
+                        int size = Integer.parseInt(str);
+                        vocab = new String[size];
+                        continue;
+                    }
+                    vocab[index++] = str;
                 }
-                return new Tokenizer(vocab);
-            } catch (Exception ignored) {}
-            return null;
+            } catch (IOException e) {
+                throw new RuntimeException(e);
+            }
+            if (vocab == null) return null;
+            return new Tokenizer(vocab);
         }
 
         public double[] tokenize(String text) {
@@ -165,6 +149,7 @@ public class ADDetector {
             } catch (Exception ignored) {
             }
         }
+
         static char regularize(char input) {
             if (input == 0x3000) {
                 return 32;

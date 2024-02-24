@@ -1,4 +1,4 @@
-package me.siuank.addetector4j;
+package me.siuank.addetector4j.learning;
 
 import huzpsb.ll4j.utils.data.*;
 import huzpsb.ll4j.model.Model;
@@ -46,7 +46,7 @@ public class Train {
         Model model = Model.readFrom("anti-ad.model");
         int trainSize = trainSplit.split.size();
         double lr = 5e-6;
-        for (int i = 0; i < 4096; i++) {
+        for (int i = 0; i < 256; ++i) {
             Pair<Integer, Integer> pair = model.trainOn(trainSplit, lr);
             double acc = pair.first() * 100.0 / trainSize;
             final int I = i;

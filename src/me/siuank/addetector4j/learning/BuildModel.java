@@ -1,4 +1,4 @@
-package me.siuank.addetector4j;
+package me.siuank.addetector4j.learning;
 
 import huzpsb.ll4j.model.Model;
 
@@ -13,10 +13,10 @@ public class BuildModel {
 //                , new JudgeLayer(2) // MSELoss
 //        );
         new Model.ContextBuilder(2048 + 1) // +1 for char size
-                .DenseLayer(30).LeakyReluLayer()
+                .DenseLayer(20).LeakyReluLayer()
                 .DenseLayer(96).LeakyReluLayer()
                 .DropoutLayer(0.6)
-                .DenseLayer(96).LeakyReluLayer()
+                .DenseLayer(50).LeakyReluLayer()
                 .DenseLayer(2)
                 .build()
                 .save("anti-ad.model");

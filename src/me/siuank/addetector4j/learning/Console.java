@@ -1,4 +1,4 @@
-package me.siuank.addetector4j;
+package me.siuank.addetector4j.learning;
 
 import huzpsb.ll4j.model.Model;
 import huzpsb.ll4j.nlp.token.Tokenizer;
@@ -23,7 +23,7 @@ public class Console {
                 case "exit" -> {
                     break LOOP;
                 }
-                case "predict" -> System.out.println(model.predict(tokenizer.tokenize(1, split[1])));
+                case "predict" -> System.out.println(model.predict(tokenizer.tokenize(1, split[1])) == 1);
                 case "train" -> {
                     String sub = split[1];
                     double learningRate = 1e-5;

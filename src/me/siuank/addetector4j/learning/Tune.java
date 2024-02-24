@@ -1,4 +1,4 @@
-package me.siuank.addetector4j;
+package me.siuank.addetector4j.learning;
 
 import huzpsb.ll4j.model.Model;
 import huzpsb.ll4j.nlp.token.Tokenizer;
@@ -24,7 +24,7 @@ public class Tune {
     }
 
     private static void trainChatting(DataSet set, Tokenizer tokenizer, Model model) {
-        read("/me/siuank/addetector4j/chatting.txt", set, tokenizer, 0);
+        read("/me/siuank/addetector4j/learning/chatting.txt", set, tokenizer, 0);
         System.out.println("others tune");
         model.trainOn(set, 5e-8);
         model.save("anti-ad.model");
@@ -32,7 +32,7 @@ public class Tune {
 
     private static void trainADS(DataSet set, Tokenizer tokenizer, Model model) {
         System.out.println("ads tune");
-        read("/me/siuank/addetector4j/ads.txt", set, tokenizer, 1);
+        read("/me/siuank/addetector4j/learning/ads.txt", set, tokenizer, 1);
         model.trainOn(set, 5e-8);
         model.save("anti-ad.model");
     }

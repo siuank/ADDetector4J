@@ -1,4 +1,4 @@
-package me.siuank.addetector4j;
+package me.siuank.addetector4j.learning;
 
 import huzpsb.ll4j.nlp.token.CharUtils;
 

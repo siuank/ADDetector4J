@@ -7,11 +7,12 @@ import huzpsb.ll4j.utils.data.DataSet;
 import huzpsb.ll4j.utils.pair.Pair;
 
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.util.Objects;
 import java.util.Scanner;
 
 public class Console {
-    public static void main(String[] args) {
+    public static void main(String[] args) throws FileNotFoundException {
         Tokenizer tokenizer = Objects.requireNonNull(Tokenizer.loadFromFile("t1.tokenized.txt"));
         Model model = Model.readFrom("anti-ad.model");
 

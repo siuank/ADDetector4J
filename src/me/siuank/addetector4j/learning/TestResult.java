@@ -7,6 +7,8 @@ import huzpsb.ll4j.utils.data.DataSet;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.nio.charset.Charset;
+import java.util.Arrays;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Scanner;
@@ -19,6 +21,7 @@ public class TestResult {
 
     public static void main(String[] args) throws FileNotFoundException {
         System.out.println("Loading model");
+        System.out.println(Charset.defaultCharset());
         Model model;
 
         Tokenizer tokenizer = Tokenizer.loadFromFile("t1.tokenized.txt");
@@ -57,7 +60,7 @@ public class TestResult {
         while (scanner.hasNextLine()) {
             String text = scanner.nextLine();
             double[] values = tokenizer.tokenize(0, text).values;
-            System.out.printf("Matcher: %s, ML: %s%n", sb(AD_DETECTOR.matcher(text).find()), sb(model.predict(values) == 1));
+            System.out.printf("Matcher: %s, ML: %s%n out: %s%n", sb(AD_DETECTOR.matcher(text).find()), sb(model.predict(values) == 1), Arrays.toString(model.predictGetRaw(values)));
         }
     }
 

@@ -153,6 +153,20 @@ public class Model {
         return ((JudgeLayer) layers[layers.length - 1]).result;
     }
 
+    public double[] predictGetRaw(double[] input) {
+        AbstractLayer[] layers = this.layers;
+        if (!(layers[layers.length - 1] instanceof JudgeLayer)) {
+            throw new RuntimeException("Last layer is not output layer");
+        }
+        for (AbstractLayer layer : layers) {
+            layer.training = false;
+            layer.input = input;
+            layer.forward();
+            input = layer.output;
+        }
+        return layers[layers.length - 1].input;
+    }
+
     public int predict(DataEntry de) {
         double[] input = de.values;
         for (AbstractLayer layer : layers) {

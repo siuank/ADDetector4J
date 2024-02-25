@@ -1,6 +1,7 @@
 package ll4j.products.addetector;
 
 import java.io.*;
+import java.nio.charset.StandardCharsets;
 import java.util.regex.Pattern;
 
 @SuppressWarnings("unused")
@@ -103,7 +104,7 @@ public class ADDetector {
         }
 
         public static Tokenizer loadFromStream(InputStream stream) {
-            return load(new InputStreamReader(stream));
+            return load(new InputStreamReader(stream, StandardCharsets.UTF_8));
         }
 
         public static Tokenizer load(Reader reader) {

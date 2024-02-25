@@ -11,6 +11,7 @@ import java.util.Scanner;
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
 import java.util.concurrent.ThreadLocalRandom;
+import java.util.stream.Collectors;
 
 public class Train {
     static final ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -56,7 +57,7 @@ public class Train {
                 lr = 9e-7;
             }
             DataSet set = new DataSet();
-            set.split.addAll(model.testAndGetWA(trainSplit).stream().filter(ignored -> ThreadLocalRandom.current().nextBoolean()).toList());
+            set.split.addAll(model.testAndGetWA(trainSplit).stream().filter(ignored -> ThreadLocalRandom.current().nextBoolean()).collect(Collectors.toList()));
             if (!set.split.isEmpty()) {
                 Collections.shuffle(set.split);
                 model.trainOn(set, 5e-8);
